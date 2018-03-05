@@ -1,26 +1,20 @@
-﻿'use strict';
-
+'use strict';
+/*
 const cart = document.querySelector('#quick-cart');
+const removeBtn = document.querySelector('.remove');
 const addToCartForm = document.querySelector('#AddToCartForm');
-const addToCartButton = document.querySelector('#AddToCart');
 let xhrColor = new XMLHttpRequest();
 xhrColor.open('GET', 'https://neto-api.herokuapp.com/cart/colors');
 xhrColor.send();
 
-// Заполняем варианты цветов
 xhrColor.addEventListener('load', () => {
     let content = '';
     let colors = JSON.parse(xhrColor.response);
     for (const color of colors) {
         let available;
         let disabled;
-		let checked;
         if (color.isAvailable) {
             available = 'available';
-			if (!localStorage.color) {
-				localStorage.color = color;
-			}
-			checked = color === localStorage.color;
         }
         else {
             available = 'soldout';
@@ -28,7 +22,7 @@ xhrColor.addEventListener('load', () => {
         }
         content += `<div data-value="${color.type}" class="swatch-element color ${color.type} ${available}">
           <div class="tooltip">${color.title}</div>
-          <input quickbeam="color" id="swatch-1-${color.type}" type="radio" name="color" value="${color.type}" ${checked}>
+          <input quickbeam="color" id="swatch-1-${color.type}" type="radio" name="color" value="${color.type}"  ${disabled}>
           <label for="swatch-1-${color.type}" style="border-color: red;">
             <span style="background-color: ${color.code};"></span>
             <img class="crossed-out" src="https://neto-api.herokuapp.com/hj/3.3/cart/soldout.png?10994296540668815886">
@@ -36,16 +30,8 @@ xhrColor.addEventListener('load', () => {
         </div>`;
     }
     document.getElementById('colorSwatch').innerHTML += content;
-
-	// Запоминаем выбор цвета в локальное хранилище
-	let colorsDiv = document.querySelector('#colorSwatch');
-	colorsDiv.addEventListener('click', (event) => {
-		event.stopPropagation();
-		alert(event.target.value);
-	});	
 });
 
-// Заполняем варианты размеров
 let xhrSize = new XMLHttpRequest();
 xhrSize.open('GET', 'https://neto-api.herokuapp.com/cart/sizes');
 xhrSize.send();
@@ -62,34 +48,25 @@ xhrSize.addEventListener('load', () => {
             available = 'soldout';
             disabled = 'disabled';
         }
-		//TODO !!!!
-		let checked = '';
         content += `<div data-value="${size.type}" class="swatch-element plain ${size.type} ${available}">
-        <input id="swatch-0-${size.type}" type="radio" name="size" value="${size.type}" ${checked}>
+        <input id="swatch-0-${size.type}" type="radio" name="size" value="${size.type}" ${disabled}>
         <label for="swatch-0-${size.type}">
           ${size.title}
           <img class="crossed-out" src="https://neto-api.herokuapp.com/hj/3.3/cart/soldout.png?10994296540668815886">
         </label>
-      </div>`;
+      </div>`
     }
     document.getElementById('sizeSwatch').innerHTML += content;
 });
 
-// Заполняем корзину
+
+
+
 let xhrCart = new XMLHttpRequest();
 xhrCart.open('GET', 'https://neto-api.herokuapp.com/cart');
 xhrCart.send();
-xhrCart.addEventListener('load', cartOnLoad);
-function cartOnLoad() {
-    let cartStatus = JSON.parse(xhrCart.response)[0];
-    if (cartStatus === undefined) {
-        return;
-    }
-    updateCart(cartStatus);	
-}
 
-// Обновляем корзину
-function updateCart(cartStatus) {
+function checkCart(cartStatus) {
 	let open = 'open';
 	if (cartStatus === undefined) {
 		cart.innerHTML = '';
@@ -106,35 +83,39 @@ function updateCart(cartStatus) {
     </div>
     <a id="quick-cart-pay" quickbeam="cart-pay" class="cart-ico ${open}">
     <span>
-    <strong class="quick-cart-text">Оформить заказ<br></strong>
+    <strong class="quick-cart-text">�������� �����<br></strong>
     <span id="quick-cart-price">$${totalAmount}.00</span>
     </span>
-    </a>`;
-	addCartRemoveHandler();
+    </a>`
+}
+let xhrRemove = new XMLHttpRequest();
+
+function cartOnLoad() {
+    let cartStatus = JSON.parse(xhrCart.response)[0];
+    if (cartStatus === undefined) {
+        return;
+    }
+    checkCart(cartStatus);
 }
 
-// Обработчик удаления из корзины
-function addCartRemoveHandler() {
-	let xhrRemove = new XMLHttpRequest();
-	const removeBtn = document.querySelector('.remove');
-	if (removeBtn !== null) {
-		removeBtn.addEventListener('click', removeItem);
-	}
-
-	function removeItem() {
-		let formData = new FormData();
-		formData.append('productId', removeBtn.dataset.id);
-		xhrRemove.open('POST', 'https://neto-api.herokuapp.com/cart/remove');
-		xhrRemove.send(formData);
-		xhrRemove.addEventListener('load', removeOnLoad);
-	}
-
-	function removeOnLoad() {
-		updateCart(JSON.parse(xhrRemove.response)[0]);
-	}
+function removeOnLoad() {
+    checkCart(JSON.parse(xhrRemove.response)[0]);
+    removeItem();
 }
 
-// Добавление в корзину
+function removeItem() {
+    if (removeBtn == null) {
+        return;
+    }
+    removeBtn.addEventListener('click', () => {
+    let formData = new FormData;
+    formData.append('productId', removeBtn.dataset.id);
+    xhrRemove.open('POST', 'https://neto-api.herokuapp.com/cart/remove');
+    xhrRemove.send(formData);
+    xhrRemove.addEventListener('load', removeOnLoad);
+	});
+}
+
 function addToCart(event) {
     event.preventDefault();
     let obj = {};
@@ -144,4 +125,9 @@ function addToCart(event) {
     xhrCart.send(formData);
 }
 
-addToCartButton.addEventListener('click', addToCart);
+
+xhrCart.addEventListener('load', cartOnLoad);
+xhrCart.addEventListener('load', removeItem);
+addToCartForm.addEventListener('click', addToCart);
+
+*/
