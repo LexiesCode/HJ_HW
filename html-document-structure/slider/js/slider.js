@@ -10,14 +10,17 @@ function slider() {
     let activeSlide = slides.firstElementChild;
     activeSlide.classList.add('slide-current');
 
-    nextBtn.addEventListener('click', () => move('next'));
-    prevBtn.addEventListener('click', () => move('prev'));
-    lastBtn.addEventListener('click', () => move('last'));
-    firstBtn.addEventListener('click', () => move('default'));
+    nextBtn.addEventListener('click', (event) => move(event.target, 'next'));
+    prevBtn.addEventListener('click', (event) => move(event.target, 'prev'));
+    lastBtn.addEventListener('click', (event) => move(event.target, 'last'));
+    firstBtn.addEventListener('click', (event) => move(event.target, 'default'));
 
     updateUI();
 
-    function move(direction) {
+    function move(button, direction) {
+		if (button === null || button.classList.contains('disabled')) {
+			return;
+		}
         activeSlide.classList.remove('slide-current');
         let nextSlide;
         switch (direction) {
@@ -33,10 +36,11 @@ function slider() {
             default:
                 nextSlide = slides.firstElementChild;;
         }
-        nextSlide.classList.add('slide-current');
-        activeSlide = nextSlide;
-
-        updateUI();
+		if (nextSlide !== null) {
+			nextSlide.classList.add('slide-current');
+			activeSlide = nextSlide;
+		}
+		updateUI();
     }
 
     function updateUI() {
