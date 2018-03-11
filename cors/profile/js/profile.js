@@ -39,9 +39,9 @@ function showTech(techs) {
     }
 
     function addTech(tech) {
-        const techIcon = document.createElement('span');
-        techIcon.classList.add('devicons', `devicons-${tech}`);
-        technologies.appendChild(techIcon);
+        const technology = document.createElement('span');
+        technology.classList.add('devicons', `devicons-${tech}`);
+        technologies.appendChild(technology);
     }
     content.style.display = 'initial';
 }
