@@ -53,7 +53,7 @@ function showConsumers(data) {
     }
 
     let others = document.createElement('span');
-    others.textContent = `+${data.total}`;
+    others.textContent = `(+${data.total})`;
     consumers.appendChild(others);
 }
 
