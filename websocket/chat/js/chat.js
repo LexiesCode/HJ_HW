@@ -1,4 +1,4 @@
-﻿'use strict'
+'use strict'
 
 const chat = document.querySelector('.chat');
 const messages = chat.querySelector('.messages-content');

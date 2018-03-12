@@ -1,4 +1,4 @@
-﻿'use strict';
+'use strict';
 
 const counter = document.querySelector('.counter');
 const errors = document.querySelector('output.errors');

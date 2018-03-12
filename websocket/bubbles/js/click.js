@@ -1,4 +1,4 @@
-﻿'use strinct';
+'use strinct';
 const socket = new WebSocket('wss://neto-api.herokuapp.com/mouse');
 
 socket.addEventListener('open', () => {
