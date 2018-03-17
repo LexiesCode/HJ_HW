@@ -44,6 +44,7 @@ function onMessage(event) {
             minute: "2-digit"
         });
         messages.appendChild(messageTemp);
+        messageTemp.scrollIntoView(true);
     }
 }
 
@@ -70,13 +71,15 @@ function submitMessage() {
         minute: "2-digit"
     });
     messages.appendChild(message);
+    message.scrollIntoView(true);
     messageInput.value = '';
 }
 
 //Попытка добавить скролл
 messages.style.cssText = "overflow: auto";
 
-/*
+
+
 let scrollableStyle = `
 	.scrollable {
 		overflow: auto; 
@@ -99,4 +102,3 @@ let scrollableStyle = `
 
 document.styleSheets[0].insertRule(scrollableStyle, 0);
 messages.classList.add('scrollable');
-*/
