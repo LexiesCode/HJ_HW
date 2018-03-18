@@ -109,9 +109,19 @@ function selectSeat(e) {
     if (target.tagName === 'DIV' && target.classList.contains('seat')) {
         let total = 0;
         if (e.shiftKey) {
-            target.classList.toggle('half');
+            if (target.classList.contains('adult')) {
+                target.classList.remove('adult');
+            }
+            target.classList.add('half');
         } else {
-            target.classList.toggle('adult');
+            if (target.classList.contains('half')) {
+                target.classList.remove('half');
+            }
+            else if (target.classList.contains('adult')) {
+                target.classList.remove('adult');
+            } else {
+                target.classList.add('adult');
+            }
         }
     }
     showTotal();
@@ -120,18 +130,19 @@ function selectSeat(e) {
 function selectAll(e) {
     e.preventDefault();
     if (e.shiftKey) {
-        Array.from(document.querySelectorAll('.seat')).forEach(element => element.classList.toggle('adult', 'half'));
-        /*Array.from(document.querySelectorAll('.seat')).forEach(element => {
-            element.classList.add('half');
-            element.classList.remove('adult');
-        });*/
-    } else {
-        Array.from(document.querySelectorAll('.seat')).forEach(element => element.classList.toggle('adult', 'half'));
-        /*
         Array.from(document.querySelectorAll('.seat')).forEach(element => {
-            element.classList.remove('half');
+            if (element.classList.contains('adult')) {
+                element.classList.remove('adult');
+            }
+            element.classList.add('half');            
+        });
+    } else {
+        Array.from(document.querySelectorAll('.seat')).forEach(element => {
+            if (element.classList.contains('half')) {
+                element.classList.remove('half');
+            }
             element.classList.add('adult');
-        });*/
+        });
     }
     showTotal();
 }
