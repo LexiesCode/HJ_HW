@@ -1,4 +1,4 @@
-'use strict';
+ 'use strict';
 
 function node(name, props = {}, ...childs) {
   const node = document.createElement(name);
