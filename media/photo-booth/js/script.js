@@ -1,59 +1,57 @@
 'use strict';
 const app = document.querySelector('.app');
-const controls =  document.querySelector('.controls');
+const controls = document.querySelector('.controls');
 const takePhotoBtn = document.querySelector('#take-photo');
 const errMessage = document.querySelector('#error-message');
 const photoList = document.querySelector('.list');
 const canvas = document.createElement('canvas');
 const ctx = canvas.getContext('2d');
-const sound = document.createElement('audio');
-sound.src = './audio/click.mp3';
 const video = document.createElement('video');
 app.appendChild(video);
+app.style.display = 'block';
+controls.style.display = 'block';
+
+navigator.mediaDevices
+    .getUserMedia({
+        video: true,
+        audio: false
+    })
+    .then(stream => {
+        video.src = URL.createObjectURL(stream);
+        video.addEventListener('canplay', (e) => {
+            setTimeout(takePhoto, 100);
+        });
+    })
+    .catch(err => {
+        errMessage.style.display = 'block';
+        errMessage.textContent = err;
+    });
 
 function takePhoto() {
-    navigator.mediaDevices
-        .getUserMedia({
-            video: true,
-            audio: false
-        })
-        .then(stream => {
-            video.src = URL.createObjectURL(stream);
-            app.style.display = 'block';
-            controls.style.display = 'block';
-             video.addEventListener('canplay', (e) => {
-                takePhotoBtn.addEventListener('click', () => {
-                    setTimeout(() => {
-                        canvas.width = video.videoWidth;
-                        canvas.height = video.videoHeight;
-                        ctx.drawImage(video, 0, 0);
-                        sound.play();
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    ctx.drawImage(video, 0, 0);
+    const sound = document.createElement('audio');
+    sound.src = './audio/click.mp3';
+    sound.play();
+    const image = canvas.toDataURL('image/jpeg', 1.0);
 
-                        const image = canvas.toDataURL();
-                        createPhotoCard();
-                        const photoCard = document.querySelector('figure');
-                        photoList.appendChild(photoCard);
-                        updateControls(photoCard, image);
-                    }, 100);
-                });
-            });
-        })
-
-        .catch(err => {
-            errMessage.style.display = 'block';
-            errMessage.textContent = err;
-        });
+    function createPhotoCard();
+    const photoCard = document.querySelector('figure');
+    photoList.appendChild(photoCard);
+    updateControls(photoCard, image);
 }
+
 
 function el(tagName, attributes, children) {
     const element = document.createElement(tagName);
     if (typeof attributes === 'object') {
-      Object.keys(attributes).forEach(i => element.setAttribute(i, attributes[i]));
+        Object.keys(attributes).forEach(i => element.setAttribute(i, attributes[i]));
     }
     if (typeof children === 'string') {
-      element.textContent = children;
+        element.textContent = children;
     } else if (children instanceof Array) {
-      children.forEach(child => element.appendChild(child));
+        children.forEach(child => element.appendChild(child));
     }
     return element;
 }
@@ -98,9 +96,12 @@ function updateControls(photoCard, image) {
 
     deletePhoto.addEventListener('click', (e) => {
         photoList.removeChild(photoCard);
+        hide(deletePhoto);
     });
 }
 
 function hide(btn) {
     btn.style.visibility = 'hidden';
 }
+
+takePhotoBtn.addEventListener('click', takePhoto);
