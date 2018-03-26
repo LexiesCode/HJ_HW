@@ -8,6 +8,7 @@ const canvas = document.createElement('canvas');
 const ctx = canvas.getContext('2d');
 const video = document.createElement('video');
 app.appendChild(video);
+let image;
 app.style.display = 'block';
 controls.style.display = 'block';
 
@@ -17,10 +18,8 @@ navigator.mediaDevices
         audio: false
     })
     .then(stream => {
-        video.src = URL.createObjectURL(stream);
-        video.addEventListener('canplay', (e) => {
-            setTimeout(takePhoto, 100);
-        });
+        video.srcObject = stream;
+        video.play();
     })
     .catch(err => {
         errMessage.style.display = 'block';
@@ -34,10 +33,9 @@ function takePhoto() {
     const sound = document.createElement('audio');
     sound.src = './audio/click.mp3';
     sound.play();
-    const image = canvas.toDataURL('image/jpeg', 1.0);
+    image = canvas.toDataURL('image/jpeg', 1.0);
 
-    function createPhotoCard();
-    const photoCard = document.querySelector('figure');
+    const photoCard = createPhotoCard();
     photoList.appendChild(photoCard);
     updateControls(photoCard, image);
 }
